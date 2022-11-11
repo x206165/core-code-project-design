@@ -10,4 +10,4 @@ Objects components
 https://github.com/x206165/core-code-project-design/issues/2
 
 UI vs Objects
-https://github.com/x206165/core-code-project-design/issues/3
+https://github.com/x206165/core-code-project-design/issues/4
