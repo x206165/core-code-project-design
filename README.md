@@ -12,5 +12,5 @@ https://github.com/x206165/core-code-project-design/issues/2
 UI vs Objects
 https://github.com/x206165/core-code-project-design/issues/4  (old version) 
 
-https://github.com/x206165/cc-budget-mgmt-frontend/issues/2  (updated with views, context and redux components map, navigation sequence, objects model) 
+https://github.com/x206165/core-code-project-design/issues/5  (updated with views, context and redux components map, navigation sequence, objects model) 
 
