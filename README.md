@@ -51,3 +51,28 @@ https://github.com/x206165/core-code-project-design/issues/4  (old version)
 
 https://github.com/x206165/core-code-project-design/issues/5  (updated with views, context and redux components map, navigation sequence, objects model) 
 
+#core-code-project-design
+A basic budget javascript application using reacjs, express and Oracle Database.
+
+#commands for the project reconstructions and execution 
+
+# build images
+
+``` powershell
+# Build Images
+docker build -t mybackend:0.1.0 backend/
+docker build -t myfrontend:0.1.0-alpine frontend/
+
+# Run Application
+docker compose up
+docker compose down
+docker compose down -v
+```
+
+# Creating docker repositories
+docker tag mybackend:0.1.0 mumolk/w3-backend:0.1.0
+docker push mumolk/w3-backend:0.1.0
+
+docker tag myfrontend:0.1.0-alpine mumolk/w3-frontend:0.1.0-alpine
+docker push mumolk/w3-frontend:0.1.0-alpine
+
