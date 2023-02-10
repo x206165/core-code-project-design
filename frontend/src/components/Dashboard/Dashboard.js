@@ -80,8 +80,9 @@ const Dashboard = () => {
       <ListGroup.Item key={category.category} action>
         <Card>
           <Card.Body>
-            <Card.Title>{category.name}</Card.Title>
-            <Card.Text>{category.description}</Card.Text>
+            <Card.Title>Category ID : {category.category}</Card.Title>
+            <Card.Title>Category name :  {category.name}</Card.Title>
+            <Card.Text>Category description : {category.description}</Card.Text>
           </Card.Body>
         </Card>
       </ListGroup.Item>

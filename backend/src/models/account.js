@@ -33,3 +33,11 @@ module.exports.create = ({ account_id, person, name, bank_name, account_balance,
     return pool(SQL_SELECT_ACCOUNT, bindings);
   };
 
+
+  module.exports.updateBalance = ({ account_id, account_balance }) => {
+    const bindings = { account_id, account_balance };
+    const SQL_UPDATE_ACCOUNT = `UPDATE APPUSER.ACCOUNT
+                                  SET ACCOUNT_BALANCE=( ACCOUNT_BALANCE + :account_balance ), MOD_DATE=SYSDATE 
+                                  WHERE ACCOUNT_ID = :account_id`;
+    return pool(SQL_UPDATE_ACCOUNT, bindings, { autoCommit: true }); 
+  }

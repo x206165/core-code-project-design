@@ -17,6 +17,7 @@ const Transaction = () => {
   const debitAccountRef = useRef();
   const creditAccountRef = useRef();
   const descriptionRef = useRef();
+  const categoryIDRef = useRef(); 
   const accountNumberRef = useRef();
   const amountRef = useRef();
   const debitCurrencyRef = useRef();
@@ -24,6 +25,8 @@ const Transaction = () => {
 
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [userTransactions, setUserTransactions] = useState([]);
+
+  const errorMessageBox = "";
 
   const getTransactions = async () => {
     const response = await fetch(
@@ -55,12 +58,28 @@ const Transaction = () => {
     await response.json();
   };
 
+  const reduceBalance = async (body) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/transaction/reduceBalance`,
+      {
+        method: 'POST',
+        headers: {
+          'content=type': 'application/json',
+          Authorization: `Bearer ${cookies.auth_token}`,
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    await response.json(); 
+  };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     
     const debitAccount = debitAccountRef.current.value;
     const creditAccount = creditAccountRef.current.value;
-    const description = descriptionRef.current.value;
+    const description = descriptionRef.current.value; 
+    const categoryID = categoryIDRef.current.value; 
     const accountNumber = accountNumberRef.current.value;
     const amount = amountRef.current.value;
     const debitCurrency = debitCurrencyRef.current.value;
@@ -69,9 +88,21 @@ const Transaction = () => {
     //if (debitAccount === '' || creditAccount === '') return; //TODO
     setDisableSubmit(true);
     try {
-      await createTransaction({ debitAccount, creditAccount, description, accountNumber, amount, debitCurrency, creditCurrency });
-      const transactions = await getTransactions();
-      setUserTransactions(transactions.data);
+      // validate not same account 
+      if ( debitAccount === creditAccount ){
+        errorMessageBox = "Duplicated account is invalid data.";
+        throw new Error("Duplicated account is invalid data.");
+      } else {
+        // create transaction 
+        await createTransaction({ debitAccount, creditAccount, description, categoryID, accountNumber, amount, debitCurrency, creditCurrency });
+        // reduce balance
+        reduceBalance({debitAccount, creditAccount, description, categoryID, accountNumber, amount, debitCurrency, creditCurrency});
+        const transactions = await getTransactions();
+        setUserTransactions(transactions.data);
+        errorMessageBox = "Creation completed";
+      }
+
+      
     } catch (error) {
       console.log(error);
     }
@@ -79,6 +110,7 @@ const Transaction = () => {
     debitAccountRef.current.value = '';
     creditAccountRef.current.value = '';
     descriptionRef.current.value = '';
+    categoryIDRef.current.value = ''; 
     accountNumberRef.current.value = '';
     amountRef.current.value = '';
     debitCurrencyRef.current.value = '';
@@ -99,20 +131,21 @@ const Transaction = () => {
     return (
       <ListGroup.Item key={transaction.transaction} action>
         <Card>
-          <Card.Body>
-            <Card.Title>{transaction.debitAccount}</Card.Title>
-            <Card.Text>{transaction.creditAccount}</Card.Text>
-            <Card.Text>{transaction.description}</Card.Text>
-            <Card.Text>{transaction.accountNumber}</Card.Text>
-            <Card.Text>{transaction.amount}</Card.Text>
-            <Card.Text>{transaction.debitCurrency}</Card.Text>
-            <Card.Text>{transaction.creditCurrency}</Card.Text>
+          <Card.Body>            
+            <Card.Title>{transaction.description}</Card.Title>
+            <Card.Text>Debit account : {transaction.debitAccount}</Card.Text>
+            <Card.Text>Credit account : {transaction.creditAccount}</Card.Text>            
+            <Card.Text>Category : {transaction.categoryID}</Card.Text>            
+            <Card.Text>Amount : {transaction.amount}</Card.Text>
+            <Card.Text>Debit currency : {transaction.debitCurrency}</Card.Text>
+            <Card.Text>Credit currency : {transaction.creditCurrency}</Card.Text>
           </Card.Body>
         </Card>
       </ListGroup.Item>
     );
   });
 
+  
   return (
     <Container fluid className="mt-5">
       <Row className="align-items-center justify-content-center">
@@ -140,7 +173,13 @@ const Transaction = () => {
                 </Row>
                 <Row className="mb-3">
                   <Form.Group as={Row} controlId="formGridEmail">
-                    <Col><Form.Label>Account Number</Form.Label></Col>
+                    <Col><Form.Label>category ID</Form.Label></Col>
+                    <Col><Form.Control placeholder="" ref={categoryIDRef} /></Col>
+                  </Form.Group>
+                </Row>
+                <Row className="mb-3">
+                  <Form.Group as={Row} controlId="formGridEmail">
+                    <Col><Form.Label>Main Account Number</Form.Label></Col>
                     <Col><Form.Control placeholder="" ref={accountNumberRef} /></Col>
                   </Form.Group>
                 </Row>
@@ -187,6 +226,7 @@ const Transaction = () => {
             </Card.Body>
           </Card>
         </Col>
+        <Card.Text>Confirmation msg : {errorMessageBox}</Card.Text>
         <Col md={3} className="d-flex align-items-start justify-content-center">
           <ListGroup>{userTransactionsList}</ListGroup>
         </Col>

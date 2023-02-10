@@ -39,3 +39,14 @@ module.exports.createAccount = async (req, res, next) => {
   };
 
   
+  module.exports.updateAccount = async (req, res, next) => {
+    const args = { account_id: req.account.account_id, 
+                    account_balance: req.account.account_balance,
+                  };
+    try {
+      await Account.updateBalance(args);
+      res.status(200).json({ message: 'Account balance updated.'});
+    } catch (error) {
+      res.status(400).json({ message: error }); 
+    }
+  }

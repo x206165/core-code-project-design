@@ -8,7 +8,8 @@ module.exports.createTransaction = async (req, res, next) => {
 
     debitAccount: req.body.debitAccount,
     creditAccount: req.body.creditAccount,
-    description: req.body.description,
+    description: req.body.description, 
+    categoryID: req.body.categoryID, 
     accountNumber: req.body.accountNumber,
     amount: req.body.amount,
     debitCurrency: req.body.debitCurrency,
@@ -41,3 +42,27 @@ module.exports.getTransactions = async (req, res, next) => {
     res.status(400).json({ messsage: error });
   }
 };
+
+
+
+module.exports.reduceAccountBalance = async (req, res, next) => {
+  const args = {
+    person: req.person.person,    
+    debitAccount: req.body.debitAccount,
+    creditAccount: req.body.creditAccount,
+    description: req.body.description, 
+    categoryID: req.body.categoryID, 
+    accountNumber: req.body.accountNumber,
+    amount: req.body.amount,
+    debitCurrency: req.body.debitCurrency,
+    creditCurrency: req.body.creditCurrency,
+  };
+  try {
+    await Transaction.reduceBalance(args);
+    res.status(200).json({ messsage: 'Debit balance updated successfully!' });
+  } catch (error) {
+    res.status(400).json({ messsage: error });
+  }
+};
+
+

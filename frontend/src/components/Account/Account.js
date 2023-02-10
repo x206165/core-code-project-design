@@ -103,10 +103,10 @@ const Account = () => {
                 <Card>
                     <Card.Body>
                         <Card.Title>{account.name}</Card.Title>
-                        <Card.Text>{account.bank_name}</Card.Text>
-                        <Card.Text>{account.account_id}</Card.Text>
-                        <Card.Text>{account.account_balance}</Card.Text>
-                        <Card.Text>{account.currency_id}</Card.Text>
+                        <Card.Text>Bank name : {account.bank_name}</Card.Text>
+                        <Card.Text>Account number : {account.account_id}</Card.Text>
+                        <Card.Text>Current balance : {account.account_balance}</Card.Text>
+                        <Card.Text>Currency : {account.currency_id}</Card.Text>
                     </Card.Body>
                 </Card>
             </ListGroup.Item>
