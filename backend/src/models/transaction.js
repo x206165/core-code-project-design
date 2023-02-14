@@ -52,3 +52,12 @@ module.exports.reduceBalance = ({ debitAccount, amount }) => {
                                 WHERE ACCOUNT_ID = :debitAccount`;
   return pool(SQL_UPDATE_ACCOUNT, bindings, { autoCommit: true }); 
 }
+
+
+module.exports.increaseBalance = ({ creditAccount, amount }) => {
+  const bindings = { creditAccount, amount };
+  const SQL_UPDATE_ACCOUNT = `UPDATE APPUSER.ACCOUNT
+                                SET ACCOUNT_BALANCE=( ACCOUNT_BALANCE + :amount ), MOD_DATE=SYSDATE 
+                                WHERE ACCOUNT_ID = :creditAccount`;
+  return pool(SQL_UPDATE_ACCOUNT, bindings, { autoCommit: true }); 
+}

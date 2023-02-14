@@ -15,8 +15,28 @@ module.exports.createTransaction = async (req, res, next) => {
     debitCurrency: req.body.debitCurrency,
     creditCurrency: req.body.creditCurrency,
   };
+
+  const args2 = {    
+    debitAccount: req.body.debitAccount,    
+    amount: req.body.amount,
+  };
+
+  const args3 = {    
+    creditAccount: req.body.creditAccount,     
+    amount: req.body.amount,
+  };
+
+
   try {
     await Transaction.create(args);
+    // validate if debit account exist 
+    if ( req.body.debitAccount != '') {
+      await Transaction.reduceBalance(args2);
+    }
+    if ( req.body.creditAccount != '' ) {
+      await Transaction.increaseBalance(args3); 
+    }    
+    
     res.status(200).json({ messsage: 'Transaction created successfully!' });
   } catch (error) {
     res.status(400).json({ messsage: error });

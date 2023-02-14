@@ -26,7 +26,7 @@ const Transaction = () => {
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [userTransactions, setUserTransactions] = useState([]);
 
-  const errorMessageBox = "";
+  const [errorMessageBox, setErrorMessageBox] = useState("");
 
   const getTransactions = async () => {
     const response = await fetch(
@@ -89,22 +89,27 @@ const Transaction = () => {
     setDisableSubmit(true);
     try {
       // validate not same account 
+      //console.log("debitAccount = " + debitAccount + " | creditAccount = " + creditAccount); 
       if ( debitAccount === creditAccount ){
-        errorMessageBox = "Duplicated account is invalid data.";
-        throw new Error("Duplicated account is invalid data.");
+        //console.alert("Duplicated account is invalid data.");
+        setErrorMessageBox("Duplicated account is invalid data.");
+        //throw new Error("Duplicated account is invalid data.");
       } else {
         // create transaction 
-        await createTransaction({ debitAccount, creditAccount, description, categoryID, accountNumber, amount, debitCurrency, creditCurrency });
+        const response = await createTransaction({ debitAccount, creditAccount, description, categoryID, accountNumber, amount, debitCurrency, creditCurrency });
         // reduce balance
-        reduceBalance({debitAccount, creditAccount, description, categoryID, accountNumber, amount, debitCurrency, creditCurrency});
+        // reduceBalance({debitAccount, creditAccount, description, categoryID, accountNumber, amount, debitCurrency, creditCurrency});
         const transactions = await getTransactions();
         setUserTransactions(transactions.data);
-        errorMessageBox = "Creation completed";
+
+
+        setErrorMessageBox("Transaction completed.");
       }
 
       
     } catch (error) {
       console.log(error);
+      setErrorMessageBox(error);
     }
     setDisableSubmit(false);
     debitAccountRef.current.value = '';
@@ -156,13 +161,13 @@ const Transaction = () => {
                 <Row className="mb-3">
                   <Form.Group as={Row} controlId="formGridEmail">
                     <Col><Form.Label>Debit Account</Form.Label></Col>
-                    <Col><Form.Control placeholder="" ref={debitAccountRef} /></Col>
+                    <Col><Form.Control placeholder="" ref={debitAccountRef} onChange= { () => setErrorMessageBox("") } /></Col>
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
                   <Form.Group as={Row} controlId="formGridEmail">
                     <Col><Form.Label>Credit Account</Form.Label></Col>
-                    <Col><Form.Control placeholder="" ref={creditAccountRef} /></Col>
+                    <Col><Form.Control placeholder="" ref={creditAccountRef} onChange= { () => setErrorMessageBox("") }/></Col>
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
@@ -226,6 +231,7 @@ const Transaction = () => {
             </Card.Body>
           </Card>
         </Col>
+        { debitAccountRef == creditAccountRef && <Card.Text>Duplicated msg : Duplicated account is invalid data.</Card.Text>}
         <Card.Text>Confirmation msg : {errorMessageBox}</Card.Text>
         <Col md={3} className="d-flex align-items-start justify-content-center">
           <ListGroup>{userTransactionsList}</ListGroup>
