@@ -20,6 +20,8 @@ const Account = () => {
     const currency_id_ref = useRef(); 
     const [disableSubmit, setDisableSubmit] = useState(false);
     const [userAccounts, setUserAccounts] = useState([]);
+    // declare the errorMessageBox value and setter because these are useState values 
+    const [errorMessageBox, setErrorMessageBox] = useState("");
 
     const getAccounts = async () => {
         const response = await fetch(
@@ -61,7 +63,10 @@ const Account = () => {
         const currency_id = currency_id_ref.current.value; 
 
         // validate data provided 
-        if (name === '' || bank_name === '' || account_id === '' || account_balance === '' || currency_id === '') return; 
+        if (name === '' || bank_name === '' || account_id === '' || account_balance === '' || currency_id === '') {
+            setErrorMessageBox("Invalid data or missing values.");
+            return;
+        }  
 
         // disable extra submit 
         setDisableSubmit(true); 
@@ -70,9 +75,11 @@ const Account = () => {
             await createAccount({ name, bank_name, account_id, account_balance, currency_id});
             const accounts = await getAccounts(); 
             setUserAccounts(accounts.data);
+            setErrorMessageBox("Account created.");
 
         } catch (error) {
             console.log(error); 
+            setErrorMessageBox(error);
         }
 
         setDisableSubmit(false); 
@@ -183,6 +190,7 @@ const Account = () => {
                     </Card.Body>
                 </Card>
                 </Col>
+                <Card.Text>Confirmation msg : {errorMessageBox}</Card.Text>
                 <Col md={3} className="d-flex align-items-start justify-content-center">
                 <ListGroup>{userAccountsList}</ListGroup>
                 </Col>

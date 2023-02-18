@@ -13,6 +13,8 @@ const Register = () => {
   const passwordRef = useRef();
   const passwordConfirmRed = useRef();
 
+  const [errorMessageBox, setErrorMessageBox] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,10 +36,12 @@ const Register = () => {
         emailRef.current.value,
         passwordRef.current.value
       );
+      setErrorMessageBox("Transaction completed.");
       return navigate('/', { replace: true });
     } catch (e) {
       console.log(e);
       setError('Failed to create an account');
+      setErrorMessageBox(error);
     }
     setDisableSubmit(false);
   };
@@ -88,6 +92,7 @@ const Register = () => {
               </Form>
             </Card.Body>
           </Card>
+          <Card.Text>Confirmation msg : {errorMessageBox}</Card.Text>
           <div className="w-100 text-center mt-2">
             Already a user? <Link to="/login">Log In</Link>
           </div>

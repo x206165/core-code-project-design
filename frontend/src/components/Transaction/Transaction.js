@@ -102,8 +102,8 @@ const Transaction = () => {
         const transactions = await getTransactions();
         setUserTransactions(transactions.data);
 
-
-        setErrorMessageBox("Transaction completed.");
+        setErrorMessageBox("Data processed");
+        
       }
 
       
@@ -231,7 +231,7 @@ const Transaction = () => {
             </Card.Body>
           </Card>
         </Col>
-        { debitAccountRef == creditAccountRef && <Card.Text>Duplicated msg : Duplicated account is invalid data.</Card.Text>}
+        { debitAccountRef === creditAccountRef && <Card.Text>Duplicated msg : Duplicated account is invalid data.</Card.Text>}
         <Card.Text>Confirmation msg : {errorMessageBox}</Card.Text>
         <Col md={3} className="d-flex align-items-start justify-content-center">
           <ListGroup>{userTransactionsList}</ListGroup>

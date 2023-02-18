@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: mumolk/w3-frontend:0.1.0-alpine-gcp
+        image: mumolk/w3-frontend:0.2.0-alpine
         imagePullPolicy: Always #as I will reuse the same tag, I will always pull the docker image
         resources:
           limits:

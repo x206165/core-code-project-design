@@ -1,15 +1,15 @@
 services:
-#  frontend:
-#    image: mumolk/w3-frontend:0.1.0-alpine #myfrontend:0.1.0-alpine
-#    ports:
-#      - 8888:80
-#  backend:
-#    image: mumolk/w3-backend:0.1.0 #mybackend:0.1.0
-#    ports:
-#      - 3800:3800
-#    env_file:
-#      - ./backend/.env
-#    restart: always
+  frontend:
+    image: mumolk/w3-frontend:0.2.0-alpine #myfrontend:0.1.0-alpine
+    ports:
+      - 8888:80
+  backend:
+    image: mumolk/w3-backend:0.2.0 #mybackend:0.1.0
+    ports:
+      - 3800:3800
+    env_file:
+      - ./backend/.env
+    restart: always
   mibasededatos:
     image: gvenzl/oracle-xe:21.3.0
     ports:
