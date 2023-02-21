@@ -61,11 +61,11 @@ A basic budget javascript application using reacjs, express and Oracle Database.
 ``` powershell
 # Build Images - con estos comando se puede compilar desde la raiz 
 docker build -t mybackend:0.2.0 backend/
-docker build -t myfrontend:0.2.1-alpine frontend/
+docker build -t myfrontend:0.2.2-alpine frontend/
 
 # para compilar dentro de la carpeta respectiva 
 docker build -t mybackend:0.2.0 .
-docker build -t myfrontend:0.2.1-alpine .
+docker build -t myfrontend:0.2.2-alpine .
 
 # Run Application
 docker compose up
@@ -77,6 +77,6 @@ docker compose down -v
 docker tag mybackend:0.2.0 mumolk/w3-backend:0.2.0
 docker push mumolk/w3-backend:0.2.0
 
-docker tag myfrontend:0.2.1-alpine mumolk/w3-frontend:0.2.1-alpine
-docker push mumolk/w3-frontend:0.2.1-alpine
+docker tag myfrontend:0.2.2-alpine mumolk/w3-frontend:0.2.2-alpine
+docker push mumolk/w3-frontend:0.2.2-alpine
 
